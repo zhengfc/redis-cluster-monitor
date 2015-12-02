@@ -12,7 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ 
 package com.redis.cluster.support.connection;
 
 import static org.springframework.util.Assert.isTrue;
@@ -33,15 +33,15 @@ import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
-/**
+*//**
  * Configuration class used for setting up {@link RedisConnection} via {@link RedisConnectionFactory} using connecting
  * to <a href="http://redis.io/topics/cluster-spec">Redis Cluster</a>. Useful when setting up a high availability Redis
  * environment.
  * 
  * @author Christoph Strobl
  * @since 1.5
- */
-public class RedisClusterConfiguration {
+ *//*
+public class RedisClusterConfiguration extends org.springframework.data.redis.connection.RedisClusterConfiguration {
 
 	private static final String REDIS_CLUSTER_NODES_CONFIG_PROPERTY = "spring.redis.cluster.nodes";
 	private static final String REDIS_CLUSTER_TIMEOUT_CONFIG_PROPERTY = "spring.redis.cluster.timeout";
@@ -52,14 +52,14 @@ public class RedisClusterConfiguration {
 	private Integer maxRedirects;
 	
 
-	/**
+	*//**
 	 * Creates new {@link RedisClusterConfiguration}.
-	 */
+	 *//*
 	public RedisClusterConfiguration() {
 		this(new MapPropertySource("RedisClusterConfiguration", Collections.<String, Object> emptyMap()));
 	}
 
-	/**
+	*//**
 	 * Creates {@link RedisClusterConfiguration} for given hostPort combinations.
 	 * 
 	 * <pre>
@@ -71,12 +71,12 @@ public class RedisClusterConfiguration {
 	 * 
 	 * @param cluster must not be {@literal null}.
 	 * @since 1.5
-	 */
+	 *//*
 	public RedisClusterConfiguration(Collection<String> clusterNodes) {
 		this(new MapPropertySource("RedisClusterConfiguration", asMap(clusterNodes, -1, -1)));
 	}
 
-	/**
+	*//**
 	 * Creates {@link RedisClusterConfiguration} looking up values in given {@link PropertySource}.
 	 * 
 	 * <pre>
@@ -89,7 +89,7 @@ public class RedisClusterConfiguration {
 	 * 
 	 * @param propertySource must not be {@literal null}.
 	 * @since 1.5
-	 */
+	 *//*
 	public RedisClusterConfiguration(PropertySource<?> propertySource) {
 
 		notNull(propertySource, "PropertySource must not be null!");
@@ -110,11 +110,11 @@ public class RedisClusterConfiguration {
 		}
 	}
 
-	/**
+	*//**
 	 * Set {@literal cluster nodes} to connect to.
 	 * 
 	 * @param nodes must not be {@literal null}.
-	 */
+	 *//*
 	public void setClusterNodes(Iterable<RedisNode> nodes) {
 
 		notNull(nodes, "Cannot set cluster nodes to 'null'.");
@@ -126,53 +126,53 @@ public class RedisClusterConfiguration {
 		}
 	}
 
-	/**
+	*//**
 	 * Returns an {@link Collections#unmodifiableSet(Set)} of {@literal cluster nodes}.
 	 * 
 	 * @return {@link Set} of nodes. Never {@literal null}.
-	 */
+	 *//*
 	public Set<RedisNode> getClusterNodes() {
 		return Collections.unmodifiableSet(clusterNodes);
 	}
 
-	/**
+	*//**
 	 * Add a cluster node to configuration.
 	 * 
 	 * @param node must not be {@literal null}.
-	 */
+	 *//*
 	public void addClusterNode(RedisNode node) {
 
 		notNull(node, "ClusterNode must not be 'null'.");
 		this.clusterNodes.add(node);
 	}
 
-	/**
+	*//**
 	 * @return
-	 */
+	 *//*
 	public RedisClusterConfiguration clusterNode(RedisNode node) {
 		this.clusterNodes.add(node);
 		return this;
 	}
 
-	/**
+	*//**
 	 * @return
-	 */
+	 *//*
 	public Long getClusterTimeout() {
 		return clusterTimeout != null && clusterTimeout > Long.MIN_VALUE ? clusterTimeout : null;
 	}
 
-	/**
+	*//**
 	 * @return
-	 */
+	 *//*
 	public Integer getMaxRedirects() {
 		return maxRedirects != null && maxRedirects > Integer.MIN_VALUE ? maxRedirects : null;
 	}
 
-	/**
+	*//**
 	 * @param host
 	 * @param port
 	 * @return
-	 */
+	 *//*
 	public RedisClusterConfiguration clusterNode(String host, Integer port) {
 		return clusterNode(new RedisNode(host, port));
 	}
@@ -193,11 +193,11 @@ public class RedisClusterConfiguration {
 		return new RedisNode(args[0], Integer.valueOf(args[1]).intValue());
 	}
 
-	/**
+	*//**
 	 * @param master must not be {@literal null} or empty.
 	 * @param clusterHostAndPorts must not be {@literal null}.
 	 * @return
-	 */
+	 *//*
 	private static Map<String, Object> asMap(Collection<String> clusterHostAndPorts, long timeout, int redirects) {
 
 		notNull(clusterHostAndPorts, "ClusterHostAndPorts must not be null!");
@@ -230,3 +230,4 @@ public class RedisClusterConfiguration {
 		this(clusterNodes, 2000, 5);
 	}
 }
+*/

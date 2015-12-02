@@ -17,22 +17,22 @@ package com.redis.cluster.support.core;
 
 import java.util.Set;
 
-import org.springframework.data.redis.connection.RedisNode;
+import org.springframework.data.redis.connection.ClusterInfo;
+import org.springframework.data.redis.connection.RedisClusterNode;
 
-import com.redis.cluster.support.connection.ClusterInfo;
-import com.redis.cluster.support.connection.RedisClusterNode;
+import com.redis.cluster.support.AddModes;
 
 /**
  * @author Christoph Strobl
  */
 public interface RedisClusterOperations<K, V> {
 
-	Set<K> keys(RedisNode node, byte[] pattern);
+	Set<K> keys(RedisClusterNode node, byte[] pattern);
 
-	String ping(RedisNode node);
+	String ping(RedisClusterNode node);
 
-	K randomKey(RedisNode node);
-	
+	K randomKey(RedisClusterNode node);
+
 	// TODO: we still need to add operations here	
 	/**
 	 * Retrieve cluster node information such as {@literal id}, {@literal host}, {@literal port} and {@literal slots}.
@@ -141,8 +141,4 @@ public interface RedisClusterOperations<K, V> {
 	 * @param slave
 	 */
 	void clusterReplicate(RedisClusterNode master, RedisClusterNode slave);
-
-	public enum AddModes {
-		MIGRATING, IMPORTING, STABLE, NODE
-	}
 }

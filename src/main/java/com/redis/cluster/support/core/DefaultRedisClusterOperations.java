@@ -18,11 +18,13 @@ package com.redis.cluster.support.core;
 import java.util.Set;
 
 import org.springframework.dao.DataAccessException;
-import org.springframework.data.redis.connection.RedisNode;
+import org.springframework.data.redis.connection.ClusterInfo;
+import org.springframework.data.redis.connection.RedisClusterConnection;
+import org.springframework.data.redis.connection.RedisClusterNode;
+import com.redis.cluster.support.connection.jedis.JedisConverters;
+import org.springframework.data.redis.core.RedisClusterCallback;
 
-import com.redis.cluster.support.connection.ClusterInfo;
-import com.redis.cluster.support.connection.RedisClusterConnection;
-import com.redis.cluster.support.connection.RedisClusterNode;
+import com.redis.cluster.support.AddModes;
 
 /**
  * @author Christoph Strobl
@@ -45,7 +47,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 	 * @see org.springframework.data.redis.core.RedisClusterOperations#keys(org.springframework.data.redis.connection.RedisNode, byte[])
 	 */
 	@Override
-	public Set<K> keys(final RedisNode node, final byte[] pattern) {
+	public Set<K> keys(final RedisClusterNode node, final byte[] pattern) {
 
 		return template.execute(new RedisClusterCallback<Set<K>>() {
 
@@ -61,7 +63,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 	 * @see org.springframework.data.redis.core.RedisClusterOperations#randomKey(org.springframework.data.redis.connection.RedisNode)
 	 */
 	@Override
-	public K randomKey(final RedisNode node) {
+	public K randomKey(final RedisClusterNode node) {
 		return template.execute(new RedisClusterCallback<K>() {
 
 			@Override
@@ -76,7 +78,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 	 * @see org.springframework.data.redis.core.RedisClusterOperations#ping(org.springframework.data.redis.connection.RedisNode)
 	 */
 	@Override
-	public String ping(final RedisNode node) {
+	public String ping(final RedisClusterNode node) {
 		return template.execute(new RedisClusterCallback<String>() {
 
 			@Override
@@ -85,14 +87,14 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 			}
 		});
 	}
-	
+
 	@Override
 	public Set<RedisClusterNode> getClusterNodes() {
 		return template.execute(new RedisClusterCallback<Set<RedisClusterNode>>() {
 
 			@Override
 			public Set<RedisClusterNode> doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return connection.getClusterNodes();
+				return JedisConverters.toSetNodes(connection.getClusterNodes());
 			}
 		});
 	}
@@ -103,7 +105,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 
 			@Override
 			public Set<RedisClusterNode> doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return connection.getClusterSlaves(master);
+				return JedisConverters.toSetNodes(connection.getClusterSlaves(master));
 			}
 		});
 	}
@@ -220,7 +222,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 
 			@Override
 			public Object doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				connection.clusterSetSlot(node, slot, com.redis.cluster.support.connection.jedis.JedisConverters.toAddSlots(mode));
+				connection.clusterSetSlot(node, slot, JedisConverters.toAddSlots(mode));
 				return null;
 			}
 		});

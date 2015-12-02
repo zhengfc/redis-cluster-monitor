@@ -9,8 +9,4 @@
 	<context:property-placeholder location="classpath:redis.properties" />
 
 	<bean class="com.redis.cluster.support.config.MonitorConfig" />
-	<!-- 对静态资源文件的访问 -->
-	<mvc:default-servlet-handler/> 
-	
-	<mvc:annotation-driven />
 </beans>

@@ -1,3 +1,13 @@
+package com.redis.cluster.support.connection.jedis;
+
+import java.util.HashSet;
+import java.util.Set;
+
+import org.springframework.data.redis.connection.RedisClusterCommands.AddSlots;
+import org.springframework.data.redis.connection.RedisClusterNode;
+
+import com.redis.cluster.support.AddModes;
+
 /*
  * Copyright 2013-2015 the original author or authors.
  *
@@ -13,10 +23,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.redis.cluster.support.connection.jedis;
 
-import com.redis.cluster.support.connection.RedisClusterCommands.AddSlots;
-import com.redis.cluster.support.core.RedisClusterOperations.AddModes;
 
 /**
  * Jedis type converters
@@ -26,8 +33,7 @@ import com.redis.cluster.support.core.RedisClusterOperations.AddModes;
  * @author Thomas Darimont
  * @author Jungtaek Lim
  */
-public class JedisConverters {
-
+abstract public class JedisConverters extends org.springframework.data.redis.connection.jedis.JedisConverters {
 	
 	public static AddSlots toAddSlots(AddModes mode) {
 		switch (mode) {
@@ -42,5 +48,13 @@ public class JedisConverters {
 			default:
 				throw new IllegalArgumentException();
 		}
+	}
+	
+	public static Set<RedisClusterNode> toSetNodes(Iterable<RedisClusterNode> nodes) {
+		Set<RedisClusterNode> clusterNodes = new HashSet<RedisClusterNode>();
+		for(RedisClusterNode node: nodes){
+			clusterNodes.add(node);
+		}
+		return clusterNodes;
 	}
 }
