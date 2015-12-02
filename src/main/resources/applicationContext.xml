@@ -10,7 +10,7 @@
 
 	<bean class="com.redis.cluster.support.config.MonitorConfig" />
 	<!-- 对静态资源文件的访问 -->
-	<mvc:default-servlet-handler/> 
-	
+	<mvc:default-servlet-handler/>
 	<mvc:annotation-driven />
+	<context:component-scan base-package="com.redis.cluster.monitor" />
 </beans>
