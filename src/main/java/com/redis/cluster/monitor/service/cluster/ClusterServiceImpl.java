@@ -10,7 +10,10 @@ import org.springframework.data.redis.connection.RedisClusterNode;
 import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.stereotype.Service;
 
+import com.redis.cluster.monitor.model.cluster.node.Node;
+import com.redis.cluster.monitor.model.cluster.slot.Slot;
 import com.redis.cluster.monitor.util.context.RuntimeContainer;
+import com.redis.cluster.monitor.util.convert.AppConverters;
 import com.redis.cluster.support.core.RedisClusterTemplate;
 
 @Service
@@ -30,15 +33,17 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void slots() {
-		Set<RedisClusterNode> nodes = clusterTemplate.getClusterOps().getClusterNodes();
-		logger.info(nodes);
-		RuntimeContainer.setRetMessage(nodes);
+		Set<RedisClusterNode> clusterNodes = clusterTemplate.getClusterOps().getClusterNodes();
+		logger.info(clusterNodes);
+		Set<Slot> slots = AppConverters.toSetOfSlot().convert(clusterNodes);
+		RuntimeContainer.setRetMessage(slots);
 	}
 
 	@Override
 	public void nodes() {
 		Set<RedisClusterNode> clusterNodes = clusterTemplate.getClusterOps().getClusterNodes();
-		RuntimeContainer.setRetMessage(clusterNodes);
+		Set<Node> nodes = AppConverters.toSetOfNode().convert(clusterNodes);
+		RuntimeContainer.setRetMessage(nodes);
 	}
 
 	@Override

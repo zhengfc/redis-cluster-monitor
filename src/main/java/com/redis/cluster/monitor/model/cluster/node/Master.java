@@ -1,13 +1,13 @@
 package com.redis.cluster.monitor.model.cluster.node;
 
 public class Master extends Node{
-	private Range range;
+	private String range;
 
-	public Range getRange() {
+	public String getRange() {
 		return range;
 	}
 
 	public void setRange(Range range) {
-		this.range = range;
+		this.range = range.toString();
 	}
 }
