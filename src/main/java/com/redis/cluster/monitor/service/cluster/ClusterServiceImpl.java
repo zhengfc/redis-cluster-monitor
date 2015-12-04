@@ -26,14 +26,14 @@ public class ClusterServiceImpl implements ClusterService {
 	
 	@Override
 	public void info() {
-		ClusterInfo info = clusterTemplate.getClusterOps().getClusterInfo();
+		ClusterInfo info = clusterTemplate.opsForCluster().getClusterInfo();
 		logger.info(info);
 		RuntimeContainer.setRetMessage(info);
 	}
 
 	@Override
 	public void slots() {
-		Set<RedisClusterNode> clusterNodes = clusterTemplate.getClusterOps().getClusterNodes();
+		Set<RedisClusterNode> clusterNodes = clusterTemplate.opsForCluster().getClusterNodes();
 		logger.info(clusterNodes);
 		Set<Slot> slots = AppConverters.toSetOfSlot().convert(clusterNodes);
 		RuntimeContainer.setRetMessage(slots);
@@ -41,14 +41,14 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void nodes() {
-		Set<RedisClusterNode> clusterNodes = clusterTemplate.getClusterOps().getClusterNodes();
+		Set<RedisClusterNode> clusterNodes = clusterTemplate.opsForCluster().getClusterNodes();
 		Set<Node> nodes = AppConverters.toSetOfNode().convert(clusterNodes);
 		RuntimeContainer.setRetMessage(nodes);
 	}
 
 	@Override
 	public void nodesInfo() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

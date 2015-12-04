@@ -44,7 +44,7 @@ public class RedisClusterTemplate<K, V> extends RedisTemplate<K, V> {
 	 * 
 	 * @return
 	 */
-	public RedisClusterOperations<K, V> getClusterOps() {
+	public RedisClusterOperations<K, V> opsForCluster() {
 		return new DefaultRedisClusterOperations<K, V>(this);
 	}
 

@@ -27,6 +27,6 @@ public class RedisClusterTemplateTest extends TestConfig {
 	@Test
 	public void testInfo() {
 		System.setProperty("line.separator", "\n");
-		logger.info(clusterTemplate.getClusterOps().getClusterInfo());
+		logger.info(clusterTemplate.opsForCluster().getClusterInfo());
 	}
 }
