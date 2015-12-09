@@ -15,6 +15,7 @@
  */
 package com.redis.cluster.support.core;
 
+import java.util.Properties;
 import java.util.Set;
 
 import org.springframework.dao.DataAccessException;
@@ -247,6 +248,28 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 			public Object doInRedis(RedisClusterConnection connection) throws DataAccessException {
 				connection.clusterReplicate(master, slave);
 				return null;
+			}
+		});
+	}
+
+	@Override
+	public Properties info() {
+		return template.execute(new RedisClusterCallback<Properties>() {
+
+			@Override
+			public Properties doInRedis(RedisClusterConnection connection) throws DataAccessException {
+				return connection.info();
+			}
+		});
+	}
+
+	@Override
+	public Properties info(final RedisClusterNode node) {
+		return template.execute(new RedisClusterCallback<Properties>() {
+
+			@Override
+			public Properties doInRedis(RedisClusterConnection connection) throws DataAccessException {
+				return connection.info(node);
 			}
 		});
 	}

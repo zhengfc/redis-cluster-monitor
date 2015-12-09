@@ -15,6 +15,7 @@
  */
 package com.redis.cluster.support.core;
 
+import java.util.Properties;
 import java.util.Set;
 
 import org.springframework.data.redis.connection.ClusterInfo;
@@ -141,4 +142,8 @@ public interface RedisClusterOperations<K, V> {
 	 * @param slave
 	 */
 	void clusterReplicate(RedisClusterNode master, RedisClusterNode slave);
+	
+	Properties info();
+	
+	Properties info(RedisClusterNode node);
 }
