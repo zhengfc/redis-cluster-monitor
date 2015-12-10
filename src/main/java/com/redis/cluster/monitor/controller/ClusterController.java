@@ -32,7 +32,8 @@ public class ClusterController {
 	
 	@RequestMapping(value = "/nodes/info", method = RequestMethod.GET)
 	public Object infos() {
-		return null;
+		clusterService.nodesInfo();
+		return RuntimeContainer.getRetMessage();
 	}
 	
 	@RequestMapping(value = "/node/info", method = RequestMethod.GET)

@@ -1,5 +1,6 @@
 package com.redis.cluster.monitor.service.cluster;
 
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.commons.logging.Log;
@@ -48,7 +49,10 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void nodesInfo() {
-		
+		Properties prop = clusterTemplate.opsForCluster().info();
+		logger.info(prop);
+		logger.info(prop.elements());
+		RuntimeContainer.setRetMessage(prop);
 		
 	}
 
