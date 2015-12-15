@@ -156,6 +156,7 @@ abstract class AbstractOperations<K, V> {
 		return hashKeySerializer().serialize(hashKey);
 	}
 
+	@SuppressWarnings("unchecked")
 	<HK> byte[][] rawHashKeys(HK... hashKeys) {
 		final byte[][] rawHashKeys = new byte[hashKeys.length][];
 		int i = 0;

@@ -1,5 +1,8 @@
 package com.redis.cluster.monitor.service.cluster;
 
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
@@ -8,11 +11,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.ClusterInfo;
 import org.springframework.data.redis.connection.RedisClusterNode;
-import org.springframework.data.redis.connection.RedisNode;
 import org.springframework.stereotype.Service;
 
 import com.redis.cluster.monitor.model.cluster.node.Node;
 import com.redis.cluster.monitor.model.cluster.slot.Slot;
+import com.redis.cluster.monitor.model.info.Info;
 import com.redis.cluster.monitor.util.context.RuntimeContainer;
 import com.redis.cluster.monitor.util.convert.AppConverters;
 import com.redis.cluster.support.core.RedisClusterTemplate;
@@ -49,70 +52,85 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void nodesInfo() {
+		Map<String, Info> infos = new HashMap<String, Info>();
 		Properties prop = clusterTemplate.opsForCluster().info();
 		logger.info(prop);
-		logger.info(prop.elements());
-		RuntimeContainer.setRetMessage(prop);
 		
+		Enumeration<Object> keys = prop.keys();
+		while (keys.hasMoreElements()) {
+			Object key = keys.nextElement();
+			Properties subProp = (Properties) prop.get(key);
+			Info info = AppConverters.toInfo().convert(subProp);
+			infos.put(String.valueOf(key), info);
+		}
+		
+		RuntimeContainer.setRetMessage(infos);
+
 	}
 
 	@Override
-	public void nodeInfo(RedisNode node) {
+	public void nodeInfo(String node) {
+		Properties prop = clusterTemplate.opsForCluster().info(create(node));
+		Info info = AppConverters.toInfo().convert(prop);
+		RuntimeContainer.setRetMessage(info);
+	}
+
+	@Override
+	public void server(String node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void server(RedisNode node) {
+	public void clients(String node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void clients(RedisNode node) {
+	public void memory(String node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void memory(RedisNode node) {
+	public void persistence(String node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void persistence(RedisNode node) {
+	public void stats(String node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void stats(RedisNode node) {
+	public void replication(String node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void replication(RedisNode node) {
+	public void cpu(String node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void cpu(RedisNode node) {
+	public void cluster(String node) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void cluster(RedisNode node) {
+	public void keyspace(String node) {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void keyspace(RedisNode node) {
-		// TODO Auto-generated method stub
-		
+	
+	private RedisClusterNode create(String node){
+		String[] hostAndPort = node.split(":");
+		return new RedisClusterNode(hostAndPort[0], Integer.parseInt(hostAndPort[1]), null);
 	}
 }
