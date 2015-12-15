@@ -1,6 +1,7 @@
 package com.redis.cluster.monitor.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,8 +37,9 @@ public class ClusterController {
 		return RuntimeContainer.getRetMessage();
 	}
 	
-	@RequestMapping(value = "/node/info", method = RequestMethod.GET)
-	public Object info() {
-		return null;
+	@RequestMapping(value = "/{node}/info", method = RequestMethod.GET)
+	public Object info(@PathVariable("node") String node ) {
+		clusterService.nodeInfo(node);
+		return RuntimeContainer.getRetMessage();
 	}
 }
