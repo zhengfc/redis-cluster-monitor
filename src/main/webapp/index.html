@@ -1,5 +1,164 @@
-<html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redis Cluster Monitor</title>
+  <meta name="description" content="Redis Cluster Monitor">
+  <meta name="zhengfc" content="Redis Cluster">
+
+  <!-- Mobile Specific Meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
+  <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+
 <body>
-<h2>Hello World!</h2>
-</body>
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-nav-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="#/cluster" class="navbar-brand">Redis Cluster</a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-nav-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#/node">Node</a></li>
+            <li><a href="#/chart">Chart</a></li>
+          </ul>
+
+          <form class="navbar-form navbar-right" action="" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class="container"><hr></div>
+  </header>
+
+
+<div class="container">
+  <div>
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"> 
+        <a ng-href="" aria-controls="affair-list" role="tab" data-toggle="tab">Info</a>
+	  </li>
+	</ul>
+	
+    <!-- Tab panes -->
+    <div class="tab-content">   
+	  <div role="tabpanel" class="tab-pane active">
+	    <div class="panel panel-default panel-info">
+		  <div class="table-responsive">
+		    <table class="table table-hover table-info" id="info">
+			  <tr>
+			    <th>state</th>
+			    <th>currentEpoch</th>
+			    <th>clusterSize</th>
+			    <th>knownNodes</th>
+			    <th>slotsAssigned</th>
+			    <th>slotsOk</th>
+			    <th>slotsPfail</th>
+			    <th>slotsFail</th>
+			    <th>messagesSent</th>
+			    <th>messagesReceived</th>
+			  </tr>
+			  <tr>
+			    <td name="state">1</td>
+			    <td name="currentEpoch">2</td>
+			    <td name="clusterSize">3</td>
+			    <td name="knownNodes">4</td>
+			    <td name="slotsAssigned">5</td>
+			    <td name="slotsOk">6</td>
+			    <td name="slotsPfail">7</td>
+			    <td name="slotsFail">8</td>
+			    <td name="messagesSent">9</td>
+			    <td name="messagesReceived">10</td>
+			  </tr>
+		    </table>
+	      </div>
+	    </div>
+      </div><!-- end list-->	  
+	</div>
+  </div>
+  
+  <div>
+	<!-- Nav tabs -->
+	<ul class="nav nav-tabs" role="tablist">
+      <li role="presentation" class="active"> 
+        <a ng-href="" aria-controls="affair-list" role="tab" data-toggle="tab">Nodes</a>
+	  </li>
+	</ul>
+	
+    <!-- Tab panes -->
+    <div class="tab-content">   
+	  <div role="tabpanel" class="tab-pane active">
+	    <div class="panel panel-default panel-info">
+		  <div class="table-responsive">
+		    <table class="table table-hover table-info" id="nodes">
+			  <tr>
+			    <th>id</th>
+			    <th>nodeType</th>
+			    <th>host</th>
+			    <th>port</th>
+			    <th>slotRange</th>
+			    <th>master</th>
+			  </tr>
+			  <tr class="nodeData0">
+			    <td name="id"></td>
+			    <td name="type"></td>
+			    <td name="host"></td>
+			    <td name="port"></td>
+			    <td name="range"></td>
+			    <td name="masterHostPort"></td>
+			  </tr>
+		    </table>
+	      </div>
+	    </div>
+      </div><!-- end list-->	  
+	</div>
+  </div>
+</div>
+
+  <footer>
+    <div class="container">
+		<hr>
+		<p><small>A <a href="https://monitor.com/">redis monitor</a> product by zhengfc</small></p>
+	</div> <!-- end container -->
+  </footer>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/html5-boilerplate/js/plugins.js"></script>
+  <script>
+    $(function() {
+	    $.getJSON( "cluster/info", function( data ) {
+	    	$("#info").fillTable( data );
+    	});
+	    $.getJSON( "cluster/nodes", function( data ) {
+	    	//1. create tr td for data
+	    	//2. fill td data
+	    	for(var i=0; i<data.length; i++){
+	    		$(".nodeData"+i).removeClass().addClass("nodeData"+(i+1));
+	    		console.log($(".nodeData"+(i+1)).html());
+	    		$(".nodeData"+(i+1)).appendTo($("#nodes"));
+	    	}
+	    	/* $.each(data, function( index, value ) {
+	    		$.each(value, function( k, v ) {
+	      		    console.log( k + ": " + v );
+	      		});
+    		}); */
+    	});
+	});
+  </script>
+  </body>
 </html>

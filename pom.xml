@@ -62,11 +62,6 @@
 		<artifactId>tomcat-servlet-api</artifactId>
 		<version>${tomcat.version}</version>
 	</dependency>
-	<dependency>
-		<groupId>commons-io</groupId>
-		<artifactId>commons-io</artifactId>
-		<version>2.4</version>
-	</dependency>
   
   	<dependency> <!-- spring test -->
 		<groupId>org.springframework</groupId>

@@ -47,6 +47,7 @@ public class ClusterServiceImpl implements ClusterService {
 	public void nodes() {
 		Set<RedisClusterNode> clusterNodes = clusterTemplate.opsForCluster().getClusterNodes();
 		Set<Node> nodes = AppConverters.toSetOfNode().convert(clusterNodes);
+		logger.info(nodes);
 		RuntimeContainer.setRetMessage(nodes);
 	}
 
