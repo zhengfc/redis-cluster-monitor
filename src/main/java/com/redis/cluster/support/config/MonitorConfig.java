@@ -11,7 +11,7 @@ import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 
-import com.redis.cluster.support.core.RedisClusterTemplate;
+import com.redis.cluster.support.core.RedisTemplate;
 import com.redis.cluster.support.serializer.DefaultKeySerializer;
 
 @Configuration
@@ -43,8 +43,8 @@ public class MonitorConfig {
 	
 	@Bean
 	@SuppressWarnings({ "rawtypes", "unchecked"})
-	public RedisClusterTemplate redisClusterTemplate() {
-		RedisClusterTemplate clusterTemplate = new RedisClusterTemplate();
+	public RedisTemplate redisClusterTemplate() {
+		RedisTemplate clusterTemplate = new RedisTemplate();
 		clusterTemplate.setConnectionFactory(jedisConnectionFactory());
 		clusterTemplate.setKeySerializer(new DefaultKeySerializer());
 		clusterTemplate.setDefaultSerializer(new GenericJackson2JsonRedisSerializer());

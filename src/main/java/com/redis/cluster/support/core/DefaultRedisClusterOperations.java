@@ -15,6 +15,9 @@
  */
 package com.redis.cluster.support.core;
 
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
@@ -22,10 +25,13 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.ClusterInfo;
 import org.springframework.data.redis.connection.RedisClusterConnection;
 import org.springframework.data.redis.connection.RedisClusterNode;
-import com.redis.cluster.support.connection.jedis.JedisConverters;
 import org.springframework.data.redis.core.RedisClusterCallback;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
 
 import com.redis.cluster.support.AddModes;
+import com.redis.cluster.support.connection.jedis.JedisConverters;
 
 /**
  * @author Christoph Strobl
@@ -33,92 +39,35 @@ import com.redis.cluster.support.AddModes;
  * @param <K>
  * @param <V>
  */
-public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V> implements
-		RedisClusterOperations<K, V> {
+public class DefaultRedisClusterOperations<K, V> extends org.springframework.data.redis.core.DefaultClusterOperations<K, V> implements RedisClusterOperations<K, V> {
 
-	private final RedisClusterTemplate<K, V> template;
+	private final RedisTemplate<K, V> template;
 
-	public DefaultRedisClusterOperations(RedisClusterTemplate<K, V> template) {
+	public DefaultRedisClusterOperations(RedisTemplate<K, V> template) {
 		super(template);
 		this.template = template;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.data.redis.core.RedisClusterOperations#keys(org.springframework.data.redis.connection.RedisNode, byte[])
-	 */
-	@Override
-	public Set<K> keys(final RedisClusterNode node, final byte[] pattern) {
-
-		return template.execute(new RedisClusterCallback<Set<K>>() {
-
-			@Override
-			public Set<K> doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return deserializeKeys(connection.keys(node, pattern));
-			}
-		});
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.data.redis.core.RedisClusterOperations#randomKey(org.springframework.data.redis.connection.RedisNode)
-	 */
-	@Override
-	public K randomKey(final RedisClusterNode node) {
-		return template.execute(new RedisClusterCallback<K>() {
-
-			@Override
-			public K doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return deserializeKey(connection.randomKey(node));
-			}
-		});
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * @see org.springframework.data.redis.core.RedisClusterOperations#ping(org.springframework.data.redis.connection.RedisNode)
-	 */
-	@Override
-	public String ping(final RedisClusterNode node) {
-		return template.execute(new RedisClusterCallback<String>() {
-
-			@Override
-			public String doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return connection.ping(node);
-			}
-		});
-	}
-
+	
 	@Override
 	public Set<RedisClusterNode> getClusterNodes() {
 		return template.execute(new RedisClusterCallback<Set<RedisClusterNode>>() {
 
 			@Override
 			public Set<RedisClusterNode> doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return JedisConverters.toSetNodes(connection.getClusterNodes());
-			}
-		});
-	}
-
-	@Override
-	public Set<RedisClusterNode> getClusterSlaves(final RedisClusterNode master) {
-		return template.execute(new RedisClusterCallback<Set<RedisClusterNode>>() {
-
-			@Override
-			public Set<RedisClusterNode> doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return JedisConverters.toSetNodes(connection.getClusterSlaves(master));
+				return JedisConverters.toSetNodes(connection.clusterGetClusterNodes());
 			}
 		});
 	}
 
 	@Override
 	public Integer getClusterSlotForKey(final K k) {
-		final byte[] rawKey = rawKey(k);
+		final byte[] rawKey = rawSelfKey(k);
 		return template.execute(new RedisClusterCallback<Integer>() {
 
 			@Override
 			public Integer doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return connection.getClusterSlotForKey(rawKey);
+				return connection.clusterGetSlotForKey(rawKey);
 			}
 		});
 	}
@@ -129,19 +78,19 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 
 			@Override
 			public RedisClusterNode doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return connection.getClusterNodeForSlot(slot);
+				return connection.clusterGetNodeForSlot(slot);
 			}
 		});
 	}
 
 	@Override
 	public RedisClusterNode getClusterNodeForKey(K k) {
-		final byte[] rawKey = rawKey(k);
+		final byte[] rawKey = rawSelfKey(k);
 		return template.execute(new RedisClusterCallback<RedisClusterNode>() {
 
 			@Override
 			public RedisClusterNode doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return connection.getClusterNodeForKey(rawKey);
+				return connection.clusterGetNodeForKey(rawKey);
 			}
 		});
 	}
@@ -152,19 +101,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 
 			@Override
 			public ClusterInfo doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return connection.getClusterInfo();
-			}
-		});
-	}
-
-	@Override
-	public void addSlots(final RedisClusterNode node, final int... slots) {
-		template.execute(new RedisClusterCallback<Object>() {
-
-			@Override
-			public Object doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				connection.addSlots(node, slots);
-				return null;
+				return connection.clusterGetClusterInfo();
 			}
 		});
 	}
@@ -175,7 +112,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 
 			@Override
 			public Long doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return connection.countKeys(slot);
+				return connection.clusterCountKeysInSlot(slot);
 			}
 		});
 	}
@@ -186,31 +123,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 
 			@Override
 			public Object doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				connection.deleteSlots(node, slots);
-				return null;
-			}
-		});
-	}
-
-	@Override
-	public void clusterForget(final RedisClusterNode node) {
-		template.execute(new RedisClusterCallback<Object>() {
-
-			@Override
-			public Object doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				connection.clusterForget(node);
-				return null;
-			}
-		});
-	}
-
-	@Override
-	public void clusterMeet(final RedisClusterNode node) {
-		template.execute(new RedisClusterCallback<Object>() {
-
-			@Override
-			public Object doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				connection.clusterMeet(node);
+				connection.clusterDeleteSlots(node, slots);
 				return null;
 			}
 		});
@@ -235,7 +148,7 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 
 			@Override
 			public Set<K> doInRedis(RedisClusterConnection connection) throws DataAccessException {
-				return deserializeKeys(connection.getKeysInSlot(slot, count));
+				return deserializeKeys(connection.clusterGetKeysInSlot(slot, count));
 			}
 		});
 	}
@@ -272,5 +185,44 @@ public class DefaultRedisClusterOperations<K, V> extends AbstractOperations<K, V
 				return connection.info(node);
 			}
 		});
+	}
+	
+	@SuppressWarnings("unchecked")
+	byte[] rawSelfKey(Object key) {
+		Assert.notNull(key, "non null key required");
+		if (keySerialize() == null && key instanceof byte[]) {
+			return (byte[]) key;
+		}
+		return keySerialize().serialize(key);
+	}
+	
+	@SuppressWarnings("rawtypes")
+	RedisSerializer keySerialize() {
+		return template.getKeySerializer();
+	}
+	
+	@SuppressWarnings("unchecked")
+	K deserializeSelfKey(byte[] value) {
+		if (keySerialize() == null) {
+			return (K) value;
+		}
+		return (K) keySerialize().deserialize(value);
+	}
+	
+	/**
+	 * @param keys
+	 * @return
+	 * @since 1.7
+	 */
+	Set<K> deserializeKeys(List<byte[]> keys) {
+
+		if (CollectionUtils.isEmpty(keys)) {
+			return Collections.emptySet();
+		}
+		Set<K> result = new LinkedHashSet<K>(keys.size());
+		for (byte[] key : keys) {
+			result.add(deserializeSelfKey(key));
+		}
+		return result;
 	}
 }

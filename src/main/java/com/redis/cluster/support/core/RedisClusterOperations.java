@@ -27,13 +27,6 @@ import com.redis.cluster.support.AddModes;
  * @author Christoph Strobl
  */
 public interface RedisClusterOperations<K, V> {
-
-	Set<K> keys(RedisClusterNode node, byte[] pattern);
-
-	String ping(RedisClusterNode node);
-
-	K randomKey(RedisClusterNode node);
-
 	// TODO: we still need to add operations here	
 	/**
 	 * Retrieve cluster node information such as {@literal id}, {@literal host}, {@literal port} and {@literal slots}.
@@ -41,14 +34,6 @@ public interface RedisClusterOperations<K, V> {
 	 * @return
 	 */
 	Set<RedisClusterNode> getClusterNodes();
-
-	/**
-	 * Retrieve information about connected slaves for given master node.
-	 * 
-	 * @param node
-	 * @return
-	 */
-	Set<RedisClusterNode> getClusterSlaves(RedisClusterNode master);
 
 	/**
 	 * Find the slot for a given {@code key}.
@@ -82,14 +67,6 @@ public interface RedisClusterOperations<K, V> {
 	ClusterInfo getClusterInfo();
 
 	/**
-	 * Assign slots to given {@link RedisClusterNode}.
-	 * 
-	 * @param node
-	 * @param slots
-	 */
-	void addSlots(RedisClusterNode node, int... slots);
-
-	/**
 	 * Count the number of keys assigned to one {@literal slot}.
 	 * 
 	 * @param slot
@@ -104,20 +81,6 @@ public interface RedisClusterOperations<K, V> {
 	 * @param slots
 	 */
 	void deleteSlots(RedisClusterNode node, int... slots);
-
-	/**
-	 * Remove given {@literal node} from cluster.
-	 * 
-	 * @param node
-	 */
-	void clusterForget(RedisClusterNode node);
-
-	/**
-	 * Add given {@literal node} to cluster.
-	 * 
-	 * @param node
-	 */
-	void clusterMeet(RedisClusterNode node);
 
 	/**
 	 * @param node

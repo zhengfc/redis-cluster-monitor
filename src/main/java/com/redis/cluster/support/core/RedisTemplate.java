@@ -18,14 +18,13 @@ package com.redis.cluster.support.core;
 import org.springframework.data.redis.connection.RedisClusterConnection;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisClusterCallback;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.Assert;
 
 /**
  * @author Christoph Strobl
  * @since 1.6
  */
-public class RedisClusterTemplate<K, V> extends RedisTemplate<K, V> {
+public class RedisTemplate<K, V> extends org.springframework.data.redis.core.RedisTemplate<K, V> {
 
 	/**
 	 * Executed wrapped command upon {@link RedisClusterConnection}.
@@ -44,7 +43,8 @@ public class RedisClusterTemplate<K, V> extends RedisTemplate<K, V> {
 	 * 
 	 * @return
 	 */
-	public RedisClusterOperations<K, V> opsForCluster() {
+	@Override
+	public DefaultRedisClusterOperations<K, V> opsForCluster() {
 		return new DefaultRedisClusterOperations<K, V>(this);
 	}
 

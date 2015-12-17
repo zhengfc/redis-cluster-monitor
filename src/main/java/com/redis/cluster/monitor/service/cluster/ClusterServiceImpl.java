@@ -18,7 +18,7 @@ import com.redis.cluster.monitor.model.cluster.slot.Slot;
 import com.redis.cluster.monitor.model.info.Info;
 import com.redis.cluster.monitor.util.context.RuntimeContainer;
 import com.redis.cluster.monitor.util.convert.AppConverters;
-import com.redis.cluster.support.core.RedisClusterTemplate;
+import com.redis.cluster.support.core.RedisTemplate;
 
 @Service
 public class ClusterServiceImpl implements ClusterService {
@@ -26,18 +26,18 @@ public class ClusterServiceImpl implements ClusterService {
 	static {
 		System.setProperty("line.separator", "\n");
 	}
-	@Autowired RedisClusterTemplate<String, Object> clusterTemplate;
+	@Autowired RedisTemplate<String, Object> redisTemplate;
 	
 	@Override
 	public void info() {
-		ClusterInfo info = clusterTemplate.opsForCluster().getClusterInfo();
+		ClusterInfo info = redisTemplate.opsForCluster().getClusterInfo();
 		logger.info(info);
 		RuntimeContainer.setRetMessage(info);
 	}
 
 	@Override
 	public void slots() {
-		Set<RedisClusterNode> clusterNodes = clusterTemplate.opsForCluster().getClusterNodes();
+		Set<RedisClusterNode> clusterNodes = redisTemplate.opsForCluster().getClusterNodes();
 		logger.info(clusterNodes);
 		Set<Slot> slots = AppConverters.toSetOfSlot().convert(clusterNodes);
 		RuntimeContainer.setRetMessage(slots);
@@ -45,7 +45,7 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void nodes() {
-		Set<RedisClusterNode> clusterNodes = clusterTemplate.opsForCluster().getClusterNodes();
+		Set<RedisClusterNode> clusterNodes = redisTemplate.opsForCluster().getClusterNodes();
 		Set<Node> nodes = AppConverters.toSetOfNode().convert(clusterNodes);
 		logger.info(nodes);
 		RuntimeContainer.setRetMessage(nodes);
@@ -54,7 +54,7 @@ public class ClusterServiceImpl implements ClusterService {
 	@Override
 	public void nodesInfo() {
 		Map<String, Info> infos = new HashMap<String, Info>();
-		Properties prop = clusterTemplate.opsForCluster().info();
+		Properties prop = redisTemplate.opsForCluster().info();
 		logger.info(prop);
 		
 		Enumeration<Object> keys = prop.keys();
@@ -71,7 +71,7 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void nodeInfo(String node) {
-		Properties prop = clusterTemplate.opsForCluster().info(create(node));
+		Properties prop = redisTemplate.opsForCluster().info(create(node));
 		Info info = AppConverters.toInfo().convert(prop);
 		RuntimeContainer.setRetMessage(info);
 	}

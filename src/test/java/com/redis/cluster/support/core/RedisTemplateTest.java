@@ -10,9 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.redis.cluster.TestConfig;
 
-public class RedisClusterTemplateTest extends TestConfig {
-	private static final Log logger = LogFactory.getLog(RedisClusterTemplateTest.class);
-	@Autowired RedisClusterTemplate<String, Object> clusterTemplate;
+public class RedisTemplateTest extends TestConfig {
+	private static final Log logger = LogFactory.getLog(RedisTemplateTest.class);
+	@Autowired RedisTemplate<String, Object> redisTemplate;
 	
 	@Before
 	public void setUp(){
@@ -21,12 +21,12 @@ public class RedisClusterTemplateTest extends TestConfig {
 	
 	@Test
 	public void testExists(){
-		assertTrue(clusterTemplate.hasKey("docker@10000test:15441"));
+		assertTrue(redisTemplate.hasKey("docker@10000test:15441"));
 	}
 	
 	@Test
 	public void testInfo() {
 		System.setProperty("line.separator", "\n");
-		logger.info(clusterTemplate.opsForCluster().getClusterInfo());
+		logger.info(redisTemplate.opsForCluster().getClusterInfo());
 	}
 }
