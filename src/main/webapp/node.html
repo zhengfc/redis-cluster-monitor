@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Redis Cluster Monitor</title>
+  <meta name="description" content="Redis Cluster Monitor">
+  <meta name="zhengfc" content="Redis Cluster">
+
+  <!-- Mobile Specific Meta -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="bower_components/html5-boilerplate/css/normalize.css">
+  <script src="bower_components/html5-boilerplate/js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+
+<body>
+  <header>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#example-nav-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a href="#/cluster" class="navbar-brand">Redis Cluster</a>
+        </div>
+        <div class="collapse navbar-collapse" id="example-nav-collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="#/node">Node</a></li>
+            <li><a href="#/chart">Chart</a></li>
+          </ul>
+
+          <form class="navbar-form navbar-right" action="" role="search">
+            <div class="form-group">
+              <input type="text" class="form-control" placeholder="Search">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+        </div>
+      </div>
+    </nav>
+    <div class="container"><hr></div>
+  </header>
+
+
+  <div class="container">
+    <br>
+	<!-- node select -->
+	<div>
+      <select class="form-control">
+	    <option>1</option>
+	    <option>2</option>
+	    <option>3</option>
+	  </select>
+    </div><!-- end select -->
+    
+    <br>
+ 
+    <div class="row"><!-- memory cpu -->
+	  <div class="table-responsive col-md-6">
+		<ul class="nav nav-tabs">
+	      <li class="active"> 
+	        <a>Memory</a>
+		  </li>
+		</ul>
+	    <table class="table table-hover table-info" id="memory">
+		  <tr>
+		    <td>used_memory</td>
+		    <td name="used_memory"></td>
+		  </tr>
+		  <tr>
+		    <td>used_memory_human</td>
+		    <td name="used_memory_human"></td>
+		  </tr>
+		  <tr>
+		    <td>used_memory_rss</td>
+		    <td name="used_memory_rss"></td>
+		  </tr>
+		  <tr>
+		    <td>used_memory_peak</td>
+		    <td name="used_memory_peak"></td>
+		  </tr>
+		  <tr>
+		    <td>used_memory_peak_human</td>
+		    <td name="used_memory_peak_human"></td>
+		  </tr>
+		  <tr>
+		    <td>used_memory_lua</td>
+		    <td name="used_memory_lua"></td>
+		  </tr>
+		  <tr>
+		    <td>mem_fragmentation_ratio</td>
+		    <td name="mem_fragmentation_ratio"></td>
+		  </tr>
+		  <tr>
+		    <td>mem_allocator</td>
+		    <td name="mem_allocator"></td>
+		  </tr>
+	    </table>
+      </div>
+      <div class="table-responsive col-md-6">
+        <ul class="nav nav-tabs">
+	      <li class="active"> 
+	        <a>CPU | Cluster | Keyspace</a>
+		  </li>
+		</ul>
+	    <table class="table table-hover table-info" id="cpu">
+		  <tr>
+		    <td>used_cpu_sys</td>
+		    <td name="used_cpu_sys"></td>
+		  </tr>
+		  <tr>
+		    <td>used_cpu_user</td>
+		    <td name="used_cpu_user"></td>
+		  </tr>
+		  <tr>
+		    <td>used_cpu_sys_children</td>
+		    <td name="used_cpu_sys_children"></td>
+		  </tr>
+		  <tr>
+		    <td>used_cpu_user_children</td>
+		    <td name="used_cpu_user_children"></td>
+		  </tr>
+		  <tr>
+		    <td>cluster_enabled</td>
+		    <td name="cluster_enabled"></td>
+		  </tr>
+		  <tr>
+		    <td>db0</td>
+		    <td name="db0"></td>
+		  </tr>
+	    </table>
+      </div>
+    </div><!-- end memory cpu -->
+    
+    <div class="row"><!-- stats persistence -->
+	  <div class="table-responsive col-md-6">
+		<ul class="nav nav-tabs">
+	      <li class="active"> 
+	        <a>Stats</a>
+		  </li>
+		</ul>
+	    <table class="table table-hover table-info" id="stats">
+		  <tr>
+		    <td>total_connections_received</td>
+		    <td name="total_connections_received"></td>
+		  </tr>
+		  <tr>
+		    <td>total_commands_processed</td>
+		    <td name="total_commands_processed"></td>
+		  </tr>
+		  <tr>
+		    <td>instantaneous_ops_per_sec</td>
+		    <td name="instantaneous_ops_per_sec"></td>
+		  </tr>
+		  <tr>
+		    <td>total_net_input_bytes</td>
+		    <td name="total_net_input_bytes"></td>
+		  </tr>
+		  <tr>
+		    <td>total_net_output_bytes</td>
+		    <td name="total_net_output_bytes"></td>
+		  </tr>
+		  <tr>
+		    <td>instantaneous_input_kbps</td>
+		    <td name="instantaneous_input_kbps"></td>
+		  </tr>
+		  <tr>
+		    <td>instantaneous_output_kbps</td>
+		    <td name="instantaneous_output_kbps"></td>
+		  </tr>
+		  <tr>
+		    <td>rejected_connections</td>
+		    <td name="rejected_connections"></td>
+		  </tr>
+		  <tr>
+		    <td>sync_full</td>
+		    <td name="sync_full"></td>
+		  </tr>
+		  <tr>
+		    <td>sync_partial_ok</td>
+		    <td name="sync_partial_ok"></td>
+		  </tr>
+		  <tr>
+		    <td>sync_partial_err</td>
+		    <td name="sync_partial_err"></td>
+		  </tr>
+		  <tr>
+		    <td>expired_keys</td>
+		    <td name="expired_keys"></td>
+		  </tr>
+		  <tr>
+		    <td>evicted_keys</td>
+		    <td name="evicted_keys"></td>
+		  </tr>
+		  <tr>
+		    <td>keyspace_hits</td>
+		    <td name="keyspace_hits"></td>
+		  </tr>
+		  <tr>
+		    <td>keyspace_misses</td>
+		    <td name="keyspace_misses"></td>
+		  </tr>
+		  <tr>
+		    <td>pubsub_channels</td>
+		    <td name="pubsub_channels"></td>
+		  </tr>
+		  <tr>
+		    <td>pubsub_patterns</td>
+		    <td name="pubsub_patterns"></td>
+		  </tr>
+		  <tr>
+		    <td>latest_fork_usec</td>
+		    <td name="latest_fork_usec"></td>
+		  </tr>
+		  <tr>
+		    <td>migrate_cached_sockets</td>
+		    <td name="migrate_cached_sockets"></td>
+		  </tr>
+	    </table>
+      </div>
+      <div class="table-responsive col-md-6">
+        <ul class="nav nav-tabs">
+	      <li class="active"> 
+	        <a>Persistence</a>
+		  </li>
+		</ul>
+	    <table class="table table-hover table-info" id="persistence">
+		  <tr>
+		    <td>loading</td>
+		    <td name="loading"></td>
+		  </tr>
+		  <tr>
+		    <td>rdb_changes_since_last_save</td>
+		    <td name="rdb_changes_since_last_save"></td>
+		  </tr>
+		  <tr>
+		    <td>rdb_bgsave_in_progress</td>
+		    <td name="rdb_bgsave_in_progress"></td>
+		  </tr>
+		  <tr>
+		    <td>rdb_last_save_time</td>
+		    <td name="rdb_last_save_time"></td>
+		  </tr>
+		  <tr>
+		    <td>rdb_last_bgsave_status</td>
+		    <td name="rdb_last_bgsave_status"></td>
+		  </tr>
+		  <tr>
+		    <td>rdb_last_bgsave_time_sec</td>
+		    <td name="rdb_last_bgsave_time_sec"></td>
+		  </tr>
+		  <tr>
+		    <td>rdb_current_bgsave_time_sec</td>
+		    <td name="rdb_current_bgsave_time_sec"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_enabled</td>
+		    <td name="aof_enabled"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_rewrite_in_progress</td>
+		    <td name="aof_rewrite_in_progress"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_rewrite_scheduled</td>
+		    <td name="aof_rewrite_scheduled"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_last_rewrite_time_sec</td>
+		    <td name="aof_last_rewrite_time_sec"></td>
+		  </tr> 
+		  <tr>
+		    <td>aof_current_rewrite_time_sec</td>
+		    <td name="aof_current_rewrite_time_sec"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_last_bgrewrite_status</td>
+		    <td name="aof_last_bgrewrite_status"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_last_write_status</td>
+		    <td name="aof_last_write_status"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_current_size</td>
+		    <td name="aof_current_size"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_base_size</td>
+		    <td name="aof_base_size"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_pending_rewrite</td>
+		    <td name="aof_pending_rewrite"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_buffer_length</td>
+		    <td name="aof_buffer_length"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_rewrite_buffer_length</td>
+		    <td name="aof_rewrite_buffer_length"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_pending_bio_fsync</td>
+		    <td name="aof_pending_bio_fsync"></td>
+		  </tr>
+		  <tr>
+		    <td>aof_delayed_fsync</td>
+		    <td name="aof_delayed_fsync"></td>
+		  </tr>
+	    </table>
+      </div>
+    </div><!-- end stats persistence -->
+    
+    <div class="row"><!-- server clients -->
+	  <div class="table-responsive col-md-6">
+		<ul class="nav nav-tabs">
+	      <li class="active"> 
+	        <a>Server</a>
+		  </li>
+		</ul>
+	    <table class="table table-hover table-info" id="server">
+		  <tr>
+		    <td>redis_version</td>
+		    <td name="redis_version"></td>
+		  </tr>
+		  <tr>
+		    <td>redis_git_sha1</td>
+		    <td name="redis_git_sha1"></td>
+		  </tr>
+		  <tr>
+		    <td>redis_git_dirty</td>
+		    <td name="redis_git_dirty"></td>
+		  </tr>
+		  <tr>
+		    <td>redis_build_id</td>
+		    <td name="redis_build_id"></td>
+		  </tr>
+		  <tr>
+		    <td>redis_mode</td>
+		    <td name="redis_mode"></td>
+		  </tr>
+		  <tr>
+		    <td>os</td>
+		    <td name="os"></td>
+		  </tr>
+		  <tr>
+		    <td>arch_bits</td>
+		    <td name="arch_bits"></td>
+		  </tr>
+		  <tr>
+		    <td>multiplexing_api</td>
+		    <td name="multiplexing_api"></td>
+		  </tr>
+		  <tr>
+		    <td>gcc_version</td>
+		    <td name="gcc_version"></td>
+		  </tr>
+		  <tr>
+		    <td>process_id</td>
+		    <td name="process_id"></td>
+		  </tr>
+		  <tr>
+		    <td>run_id</td>
+		    <td name="run_id"></td>
+		  </tr>
+		  <tr>
+		    <td>tcp_port</td>
+		    <td name="tcp_port"></td>
+		  </tr>
+		  <tr>
+		    <td>uptime_in_seconds</td>
+		    <td name="uptime_in_seconds"></td>
+		  </tr>
+		  <tr>
+		    <td>uptime_in_days</td>
+		    <td name="uptime_in_days"></td>
+		  </tr>
+		  <tr>
+		    <td>hz</td>
+		    <td name="hz"></td>
+		  </tr>
+		  <tr>
+		    <td>lru_clock</td>
+		    <td name="lru_clock"></td>
+		  </tr>
+		  <tr>
+		    <td>config_file</td>
+		    <td name="config_file"></td>
+		  </tr>
+	    </table>
+      </div>
+      <div class="table-responsive col-md-6">
+        <ul class="nav nav-tabs">
+	      <li class="active"> 
+	        <a>Clients</a>
+		  </li>
+		</ul>
+	    <table class="table table-hover table-info" id="clients-replication">
+		  <tr>
+		    <td>connected_clients</td>
+		    <td name="connected_clients"></td>
+		  </tr>
+		  <tr>
+		    <td>client_longest_output_list</td>
+		    <td name="client_longest_output_list"></td>
+		  </tr>
+		  <tr>
+		    <td>client_biggest_input_buf</td>
+		    <td name="client_biggest_input_buf"></td>
+		  </tr>
+		  <tr>
+		    <td>blocked_clients</td>
+		    <td name="blocked_clients"></td>
+		  </tr>
+		  <tr>
+		    <td><b>replication below:</b></td>
+		    <td></td>
+		  </tr>
+		  <tr>
+		    <td>role</td>
+		    <td name="role"></td>
+		  </tr>
+		  <tr>
+		    <td>master_repl_offset</td>
+		    <td name="master_repl_offset"></td>
+		  </tr>
+		  <tr>
+		    <td>repl_backlog_active</td>
+		    <td name="repl_backlog_active"></td>
+		  </tr>
+		  <tr>
+		    <td>repl_backlog_size</td>
+		    <td name="repl_backlog_size"></td>
+		  </tr>
+		  <tr>
+		    <td>repl_backlog_first_byte_offset</td>
+		    <td name="repl_backlog_first_byte_offset"></td>
+		  </tr>
+		  <tr>
+		    <td>repl_backlog_histlen</td>
+		    <td name="repl_backlog_histlen"></td>
+		  </tr>
+		  <tr>
+		    <td>connected_slaves</td>
+		    <td name="connected_slaves"></td>
+		  </tr>
+	    </table>
+      </div>
+    </div><!-- end server clients -->
+    
+  </div>
+
+  <footer>
+    <div class="container">
+		<hr>
+		<p><small>A <a href="https://monitor.com/">redis monitor</a> product by zhengfc</small></p>
+	</div> <!-- end container -->
+  </footer>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/html5-boilerplate/js/plugins.js"></script>
+  <script>
+  $(function() {
+    $.getJSON( "http://localhost:8080/monitor/10.48.193.201:7379/info", function( data ) {
+    	var options = {
+   		    findbyname: true,
+   		    restrict: false
+   		}
+    	
+    	$("#memory").fillTable( data.memory, options );  //fill memory
+    	$("#cpu").fillTable( data.cpu, options );  //fill cpu
+    	$("#cpu").fillTable( data.cluster, options );  //fill cluster
+    	$("#cpu").fillTable( data.keyspace, options );  //fill keyspace
+    	
+    	$("#stats").fillTable( data.stats, options );  //fill stats
+    	$("#persistence").fillTable( data.persistence, options );  //fill persistence
+
+    	$("#server").fillTable( data.server, options );  //fill server
+    	$("#clients-replication").fillTable( data.clients, options );  //fill clients
+    	console.log("replication:::" + JSON.stringify(data.replication));
+    	$("#clients-replication").fillTable( data.replication, options );  //fill replication
+    	var slaveSize = data.replication.connected_slaves;
+    	for(var i=0; i<slaveSize; i++){
+    		
+    	}
+ 	});
+  });
+  </script>
+  </body>
+</html>
