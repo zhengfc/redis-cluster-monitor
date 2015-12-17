@@ -142,21 +142,19 @@
   <script>
     $(function() {
 	    $.getJSON( "cluster/info", function( data ) {
-	    	$("#info").fillTable( data );
+	    	$("#info").fillTable( data );  //fill single table
     	});
 	    $.getJSON( "cluster/nodes", function( data ) {
 	    	//1. create tr td for data
-	    	//2. fill td data
-	    	for(var i=0; i<data.length; i++){
-	    		$(".nodeData"+i).removeClass().addClass("nodeData"+(i+1));
-	    		console.log($(".nodeData"+(i+1)).html());
-	    		$(".nodeData"+(i+1)).appendTo($("#nodes"));
+	    	for(var i=0; i<data.length-1; i++){
+	    		var $node = $(".nodeData"+i).clone();
+	    		$node.removeClass().addClass("nodeData"+(i+1));
+	    		$node.appendTo($("#nodes"));
 	    	}
-	    	/* $.each(data, function( index, value ) {
-	    		$.each(value, function( k, v ) {
-	      		    console.log( k + ": " + v );
-	      		});
-    		}); */
+	    	//2. fill td data
+	    	$.each(data, function( index, value ) {
+	    		$(".nodeData"+index).fillTable( value );
+    		});
     	});
 	});
   </script>
