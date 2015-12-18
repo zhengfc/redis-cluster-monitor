@@ -5,8 +5,8 @@ Redis3.0 Cluster Monitor
   2. change redis.properties for yourself
   3. make package
   4. run war on server(tomcat/jetty)  
-![cluster](../doc/img/clusterinfo.png)
-![node](../doc/img/nodeinfo.png)
+![cluster](./doc/img/clusterinfo.png)  
+![node](./doc/img/nodeinfo.png)
 
 ## cluster
   * cluster info
