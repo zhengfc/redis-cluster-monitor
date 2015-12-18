@@ -7,22 +7,14 @@ Redis3.0 Cluster Monitor
   4. run war on server(tomcat/jetty)
 
 ## cluster
-  * cluster info
-  * slots
-  * cluster nodes  
+  * cluster info, cluster slots, cluster nodes  
 ![cluster](./doc/img/clusterinfo.png) 
 
 ## nodes(You can change node with select)
   * info  
-    * Server
-    * Clients
-    * Memory
-    * Persistence
-    * Stats
-    * Replication
-    * Cpu
-    * Cluster
-    * Keyspace  
+    * Memory, Cpu|Cluster|Keyspace
+    * Stats, Persistence
+    * Server, Clients|Replication
 ![node](./doc/img/nodeinfo.png)
 
 ## chart | cmd will be coming...
