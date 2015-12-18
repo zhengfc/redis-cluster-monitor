@@ -71,14 +71,14 @@
     		$( "#content" ).load( showElement );
     		//load data
     		if(showElement.indexOf("node")>-1)
-    			loadNodeData();
+    			loadNode();
     		else if(showElement.indexOf("cluster")>-1)
-    			loadClusterData();
+    			loadCluster();
     		else if(showElement.indexOf("chart")>-1)
-    			loadChartData();
+    			loadChart();
     	}
 
-    	function loadClusterData() {
+    	function loadCluster() {
     		$.getJSON( "/monitor/cluster/info", function( data ) {
     	    	$("#info").fillTable( data );  //fill single table
         	});
@@ -96,8 +96,24 @@
         	});
     	}
     	
-    	function loadNodeData(){
-    		$.getJSON( "/monitor/10.48.193.202:7380/info", function( data ) {
+    	function loadNode(){
+    		$.getJSON( "/monitor/cluster/master", function( data ) {
+    			var options = "";
+    			$.each(data, function( index, value ) {
+    				options += '<option>'+ value.host+":"+value.port+'</option>';
+        		});
+    			$('.nodeSelect').append(options);
+    			fillNodeData($( ".nodeSelect option:selected" ).text());
+        		
+        		$( ".nodeSelect" ).change(function(){
+        			fillNodeData($( ".nodeSelect option:selected" ).text());
+            	});
+    		});
+    	}
+    	
+    	function fillNodeData(hostPort) {
+    		var uri = "/monitor/" + hostPort + "/info";
+    		$.getJSON( uri, function( data ) {
     	    	var options = {
     	   		    findbyname: true,
     	   		    restrict: false
@@ -121,7 +137,7 @@
     	 	});
     	}
     	
-    	function loadChartData() {
+    	function loadChart() {
     		
     	}
 	});

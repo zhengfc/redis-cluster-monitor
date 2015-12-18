@@ -47,4 +47,10 @@ public class ClusterController {
 		clusterService.nodeInfo(node);
 		return RuntimeContainer.getRetMessage();
 	}
+	
+	@RequestMapping(value = "/cluster/master", method = RequestMethod.GET)
+	public Object clusterMaster() {
+		clusterService.activeMasters();
+		return RuntimeContainer.getRetMessage();
+	}
 }

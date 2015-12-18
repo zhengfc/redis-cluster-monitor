@@ -2,6 +2,7 @@ package com.redis.cluster.monitor.service.cluster;
 
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -66,7 +67,6 @@ public class ClusterServiceImpl implements ClusterService {
 		}
 		
 		RuntimeContainer.setRetMessage(infos);
-
 	}
 
 	@Override
@@ -75,63 +75,28 @@ public class ClusterServiceImpl implements ClusterService {
 		Info info = AppConverters.toInfo().convert(prop);
 		RuntimeContainer.setRetMessage(info);
 	}
-
+	
 	@Override
-	public void server(String node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void clients(String node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void memory(String node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void persistence(String node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void stats(String node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void replication(String node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cpu(String node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cluster(String node) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void keyspace(String node) {
-		// TODO Auto-generated method stub
-		
+	public void activeMasters() {
+		Set<RedisClusterNode> clusterNodes = redisTemplate.opsForCluster().getClusterNodes();
+		Set<Node> nodes = AppConverters.toSetOfNode().convert(getActiveMasterNodes(clusterNodes));
+		logger.info(nodes);
+		RuntimeContainer.setRetMessage(nodes);
 	}
 	
 	private RedisClusterNode create(String node){
 		String[] hostAndPort = node.split(":");
 		return new RedisClusterNode(hostAndPort[0], Integer.parseInt(hostAndPort[1]), null);
+	}
+	
+	private Set<RedisClusterNode> getActiveMasterNodes(Set<RedisClusterNode> nodes) {
+
+		Set<RedisClusterNode> activeMasterNodes = new LinkedHashSet<RedisClusterNode>(nodes.size());
+		for (RedisClusterNode node : nodes) {
+			if (node.isMaster() && node.isConnected() && !node.isMarkedAsFail()) {
+				activeMasterNodes.add(node);
+			}
+		}
+		return activeMasterNodes;
 	}
 }
