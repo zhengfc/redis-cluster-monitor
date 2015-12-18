@@ -12,7 +12,7 @@ Redis3.0 Cluster Monitor
   * cluster nodes  
 ![cluster](./doc/img/clusterinfo.png) 
 
-## nodes
+## nodes(You can change node with select)
   * info  
     * Server
     * Clients
