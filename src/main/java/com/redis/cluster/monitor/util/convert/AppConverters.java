@@ -8,8 +8,10 @@ import org.springframework.data.redis.connection.RedisClusterNode;
 import org.springframework.data.redis.connection.RedisClusterNode.SlotRange;
 import org.springframework.data.redis.connection.convert.Converters;
 
+import com.redis.cluster.monitor.model.cluster.node.Master;
 import com.redis.cluster.monitor.model.cluster.node.Node;
 import com.redis.cluster.monitor.model.cluster.node.Range;
+import com.redis.cluster.monitor.model.cluster.node.Slave;
 import com.redis.cluster.monitor.model.cluster.slot.Slot;
 import com.redis.cluster.monitor.model.info.Info;
 
@@ -42,5 +44,18 @@ public class AppConverters extends Converters {
 			}
 		}
 		return null;
+	}
+	
+	public static Node convertMaster(RedisClusterNode cnode) {
+		Master master = new Master(cnode);
+		master.setRange(AppConverters.toRange().convert(cnode.getSlotRange()));
+		return master;
+	}
+	
+	public static Node convertSlave(RedisClusterNode cnode, String father) {
+		Slave slave = new Slave(cnode);
+		slave.setMasterId(cnode.getMasterId());
+		slave.setMasterHostPort(father);
+		return slave;
 	}
 }

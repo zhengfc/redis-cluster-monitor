@@ -1,8 +1,10 @@
 package com.redis.cluster.monitor.service.cluster;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -21,6 +23,14 @@ import com.redis.cluster.monitor.util.context.RuntimeContainer;
 import com.redis.cluster.monitor.util.convert.AppConverters;
 import com.redis.cluster.support.core.RedisTemplate;
 
+/**
+ * @author fczheng
+ *
+ */
+/**
+ * @author fczheng
+ *
+ */
 @Service
 public class ClusterServiceImpl implements ClusterService {
 	private static final Log logger = LogFactory.getLog(ClusterServiceImpl.class);
@@ -47,9 +57,8 @@ public class ClusterServiceImpl implements ClusterService {
 	@Override
 	public void nodes() {
 		Set<RedisClusterNode> clusterNodes = redisTemplate.opsForCluster().getClusterNodes();
-		Set<Node> nodes = AppConverters.toSetOfNode().convert(clusterNodes);
-		logger.info(nodes);
-		RuntimeContainer.setRetMessage(nodes);
+		logger.info(sortNodes(clusterNodes));
+		RuntimeContainer.setRetMessage(sortNodes(clusterNodes));
 	}
 
 	@Override
@@ -98,5 +107,20 @@ public class ClusterServiceImpl implements ClusterService {
 			}
 		}
 		return activeMasterNodes;
+	}
+	
+	private List<Node> sortNodes(Set<RedisClusterNode> clusterNodes) {
+		Set<RedisClusterNode> activeNodes = getActiveMasterNodes(clusterNodes);
+		List<Node> sortedNodes =new ArrayList<Node>(clusterNodes.size());
+		
+		for(RedisClusterNode node : activeNodes){
+			sortedNodes.add(AppConverters.convertMaster(node));
+			for(RedisClusterNode clusterNode : clusterNodes){
+				if(clusterNode.isSlave() && clusterNode.getMasterId().equals(node.getId())){
+					sortedNodes.add(AppConverters.convertSlave(clusterNode, node.asString()));
+				}
+			}
+		}
+		return sortedNodes;
 	}
 }
