@@ -1,6 +1,13 @@
 # redis-cluster-monitor
 Redis3.0 Cluster Monitor
 
+  1. git clone https://github.com/twbs/bootstrap.git 
+  2. change redis.properties for yourself
+  3. make package
+  4. run war on server(tomcat/jetty)
+![cluster](./doc/clusterinfo.png)
+![node](./doc/nodeinfo.png)
+
 ## cluster
   * cluster info
   * slots
@@ -18,5 +25,5 @@ Redis3.0 Cluster Monitor
     * Cluster
     * Keyspace
 
-## cmd
+## chart | cmd will be coming...
 key expire keysinslot slotsinnode...
