@@ -1,5 +1,4 @@
 # redis-cluster-monitor
-Redis3.0 Cluster Monitor
 
   1. git clone https://github.com/zhengfc/redis-cluster-monitor.git 
   2. change redis.properties for yourself
