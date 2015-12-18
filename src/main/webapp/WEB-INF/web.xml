@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:javaee="http://java.sun.com/xml/ns/javaee"
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-	<display-name>rc-monitor</display-name>
+	<display-name>monitor</display-name>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

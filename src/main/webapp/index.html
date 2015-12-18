@@ -25,12 +25,12 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a href="#/cluster" class="navbar-brand">Redis Cluster</a>
+          <a href="#" class="navbar-brand" id="clusterNav">Redis Cluster</a>
         </div>
         <div class="collapse navbar-collapse" id="example-nav-collapse">
           <ul class="nav navbar-nav">
-            <li><a href="#/node">Node</a></li>
-            <li><a href="#/chart">Chart</a></li>
+            <li><a href="#" id="nodeNav">Node</a></li>
+            <li><a href="#" id="chartNav">Chart</a></li>
           </ul>
 
           <form class="navbar-form navbar-right" action="" role="search">
@@ -44,91 +44,9 @@
     </nav>
     <div class="container"><hr></div>
   </header>
-
-
-<div class="container">
-  <div>
-	<!-- Nav tabs -->
-	<ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"> 
-        <a ng-href="" aria-controls="affair-list" role="tab" data-toggle="tab">Info</a>
-	  </li>
-	</ul>
-	
-    <!-- Tab panes -->
-    <div class="tab-content">   
-	  <div role="tabpanel" class="tab-pane active">
-	    <div class="panel panel-default panel-info">
-		  <div class="table-responsive">
-		    <table class="table table-hover table-info" id="info">
-			  <tr>
-			    <th>state</th>
-			    <th>currentEpoch</th>
-			    <th>clusterSize</th>
-			    <th>knownNodes</th>
-			    <th>slotsAssigned</th>
-			    <th>slotsOk</th>
-			    <th>slotsPfail</th>
-			    <th>slotsFail</th>
-			    <th>messagesSent</th>
-			    <th>messagesReceived</th>
-			  </tr>
-			  <tr>
-			    <td name="state"></td>
-			    <td name="currentEpoch"></td>
-			    <td name="clusterSize"></td>
-			    <td name="knownNodes"></td>
-			    <td name="slotsAssigned"></td>
-			    <td name="slotsOk"></td>
-			    <td name="slotsPfail"></td>
-			    <td name="slotsFail"></td>
-			    <td name="messagesSent"></td>
-			    <td name="messagesReceived"></td>
-			  </tr>
-		    </table>
-	      </div>
-	    </div>
-      </div><!-- end list-->	  
-	</div>
-  </div>
   
-  <div>
-	<!-- Nav tabs -->
-	<ul class="nav nav-tabs" role="tablist">
-      <li role="presentation" class="active"> 
-        <a ng-href="" aria-controls="affair-list" role="tab" data-toggle="tab">Nodes</a>
-	  </li>
-	</ul>
-	
-    <!-- Tab panes -->
-    <div class="tab-content">   
-	  <div role="tabpanel" class="tab-pane active">
-	    <div class="panel panel-default panel-info">
-		  <div class="table-responsive">
-		    <table class="table table-hover table-info" id="nodes">
-			  <tr>
-			    <th>id</th>
-			    <th>nodeType</th>
-			    <th>host</th>
-			    <th>port</th>
-			    <th>slotRange</th>
-			    <th>master</th>
-			  </tr>
-			  <tr class="nodeData0">
-			    <td name="id"></td>
-			    <td name="type"></td>
-			    <td name="host"></td>
-			    <td name="port"></td>
-			    <td name="range"></td>
-			    <td name="masterHostPort"></td>
-			  </tr>
-		    </table>
-	      </div>
-	    </div>
-      </div><!-- end list-->	  
-	</div>
+  <div class="container" id="content">
   </div>
-</div>
 
   <footer>
     <div class="container">
@@ -141,21 +59,71 @@
   <script src="bower_components/html5-boilerplate/js/plugins.js"></script>
   <script>
     $(function() {
-	    $.getJSON( "cluster/info", function( data ) {
-	    	$("#info").fillTable( data );  //fill single table
+    	$( "#content" ).load( "cluster.html" );
+    	loadClusterData();
+    	
+    	$('header a').click(function(index, value){
+    		var id = $(this).attr('id');
+    		var showElement = id.replace("Nav", ".html");
+    		includeHtml(showElement);
     	});
-	    $.getJSON( "cluster/nodes", function( data ) {
-	    	//1. create tr td for data
-	    	for(var i=0; i<data.length-1; i++){
-	    		var $node = $(".nodeData"+i).clone();
-	    		$node.removeClass().addClass("nodeData"+(i+1));
-	    		$node.appendTo($("#nodes"));
-	    	}
-	    	//2. fill td data
-	    	$.each(data, function( index, value ) {
-	    		$(".nodeData"+index).fillTable( value );
-    		});
-    	});
+    	function includeHtml(showElement) {
+    		$( "#content" ).load( showElement );
+    		//load data
+    		if(showElement.indexOf("node")>-1)
+    			loadNodeData();
+    		else if(showElement.indexOf("cluster")>-1)
+    			loadClusterData();
+    		else if(showElement.indexOf("chart")>-1)
+    			loadChartData();
+    	}
+
+    	function loadClusterData() {
+    		$.getJSON( "/monitor/cluster/info", function( data ) {
+    	    	$("#info").fillTable( data );  //fill single table
+        	});
+    	    $.getJSON( "/monitor/cluster/nodes", function( data ) {
+    	    	//1. create tr td for data
+    	    	for(var i=0; i<data.length-1; i++){
+    	    		var $node = $(".nodeData"+i).clone();
+    	    		$node.removeClass().addClass("nodeData"+(i+1));
+    	    		$node.appendTo($("#nodes"));
+    	    	}
+    	    	//2. fill td data
+    	    	$.each(data, function( index, value ) {
+    	    		$(".nodeData"+index).fillTable( value );
+        		});
+        	});
+    	}
+    	
+    	function loadNodeData(){
+    		$.getJSON( "/monitor/10.48.193.202:7380/info", function( data ) {
+    	    	var options = {
+    	   		    findbyname: true,
+    	   		    restrict: false
+    	   		}
+    	    	
+    	    	$("#memory").fillTable( data.memory, options );  //fill memory
+    	    	$("#cpu").fillTable( data.cpu, options );  //fill cpu
+    	    	$("#cpu").fillTable( data.cluster, options );  //fill cluster
+    	    	$("#cpu").fillTable( data.keyspace, options );  //fill keyspace
+    	    	
+    	    	$("#stats").fillTable( data.stats, options );  //fill stats
+    	    	$("#persistence").fillTable( data.persistence, options );  //fill persistence
+
+    	    	$("#server").fillTable( data.server, options );  //fill server
+    	    	$("#clients-replication").fillTable( data.clients, options );  //fill clients
+    	    	$("#clients-replication").fillTable( data.replication, options );  //fill replication
+    	    	var slaveSize = data.replication.connected_slaves;  //slaves
+    	    	for(var i=0; i<slaveSize; i++){
+    	    		
+    	    	}
+    	 	});
+    	}
+    	
+    	function loadChartData() {
+    		
+    	}
 	});
   </script>
   </body>

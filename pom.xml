@@ -76,6 +76,6 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>redis-cluster-monitor</finalName>
+    <finalName>monitor</finalName>
   </build>
 </project>
