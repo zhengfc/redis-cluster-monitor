@@ -83,28 +83,28 @@ for i in {11001..16383}; do redis-cli -h 127.0.0.1 -p 7020 cluster addslots ${i}
 cluster info  
 </code>
 
-![info](./doc/cluster-info.png)  
+![info](./cluster-info.png)  
 <code>
 cluster nodes  
 </code>
 
-![nodes](./doc/cluster-nodes.png)  
+![nodes](./cluster-nodes.png)  
 自动升级功能已测试过，上图初始化时定义的master为7001，7003，7005；先停掉7001后7000自动升级为master，重启7001后7001变为7000的slave   
 <code>
 cluster slots  
 </code>
 
-![slots](./doc/cluster-slots.png)  
+![slots](./cluster-slots.png)  
 <code>
 redirect  
 </code>
 
-![redirect](./doc/cluster-redirect.png)  
+![redirect](./cluster-redirect.png)  
 <code>
 hash tags  
 </code>
 
-![hash-tags](./doc/cluster-hash-tags.png)  
+![hash-tags](./cluster-hash-tags.png)  
 
 更多集群命令请参照:  
 [http://redis.io/commands/cluster-addslots](http://redis.io/commands/cluster-addslots)
