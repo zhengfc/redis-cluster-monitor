@@ -22,11 +22,6 @@ import com.redis.cluster.monitor.model.cluster.slot.Slot;
 import com.redis.cluster.monitor.model.info.Info;
 import com.redis.cluster.monitor.util.context.RuntimeContainer;
 import com.redis.cluster.monitor.util.convert.AppConverters;
-
-/**
- * @author fczheng
- *
- */
 /**
  * @author fczheng
  *
