@@ -1,6 +1,6 @@
 package com.redis.cluster;
 
-import com.redis.cluster.support.core.RedisTemplateTest;
+import com.redis.cluster.support.core.ClusterConnectionTest;
 
 import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
@@ -15,7 +15,7 @@ public class AppTest{
 	 */
 	public static Test suite() {
 		TestSuite suite= new TestSuite("TestSuite for app");
-		suite.addTest(new JUnit4TestAdapter(RedisTemplateTest.class));
+		suite.addTest(new JUnit4TestAdapter(ClusterConnectionTest.class));
 		return suite;
 	}
 

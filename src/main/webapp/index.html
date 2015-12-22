@@ -31,6 +31,7 @@
           <ul class="nav navbar-nav">
             <li><a href="#" id="nodeNav">Node</a></li>
             <li><a href="#" id="chartNav">Chart</a></li>
+            <li><a href="#" id="cmdNav">Cmd</a></li>
           </ul>
 
           <form class="navbar-form navbar-right" action="" role="search">
@@ -76,6 +77,8 @@
     			loadCluster();
     		else if(showElement.indexOf("chart")>-1)
     			loadChart();
+    		else
+    			loadCmd();
     	}
 
     	function loadCluster() {
@@ -138,6 +141,10 @@
     	}
     	
     	function loadChart() {
+    		
+    	}
+    	
+    	function loadCmd() {
     		
     	}
 	});

@@ -7,12 +7,13 @@ import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.connection.jedis.JedisClusterConnection;
 
 import com.redis.cluster.TestConfig;
 
-public class RedisTemplateTest extends TestConfig {
-	private static final Log logger = LogFactory.getLog(RedisTemplateTest.class);
-	@Autowired RedisTemplate<String, Object> redisTemplate;
+public class ClusterConnectionTest extends TestConfig {
+	private static final Log logger = LogFactory.getLog(ClusterConnectionTest.class);
+	@Autowired JedisClusterConnection clusterConnection;
 	
 	@Before
 	public void setUp(){

@@ -14,6 +14,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.ClusterInfo;
 import org.springframework.data.redis.connection.RedisClusterNode;
+import org.springframework.data.redis.connection.jedis.JedisClusterConnection;
 import org.springframework.stereotype.Service;
 
 import com.redis.cluster.monitor.model.cluster.node.Node;
@@ -21,7 +22,6 @@ import com.redis.cluster.monitor.model.cluster.slot.Slot;
 import com.redis.cluster.monitor.model.info.Info;
 import com.redis.cluster.monitor.util.context.RuntimeContainer;
 import com.redis.cluster.monitor.util.convert.AppConverters;
-import com.redis.cluster.support.core.RedisTemplate;
 
 /**
  * @author fczheng
@@ -37,18 +37,18 @@ public class ClusterServiceImpl implements ClusterService {
 	static {
 		System.setProperty("line.separator", "\n");
 	}
-	@Autowired RedisTemplate<String, Object> redisTemplate;
+	@Autowired JedisClusterConnection clusterConnection;
 	
 	@Override
 	public void info() {
-		ClusterInfo info = redisTemplate.opsForCluster().getClusterInfo();
+		ClusterInfo info = clusterConnection.clusterGetClusterInfo();
 		logger.info(info);
 		RuntimeContainer.setRetMessage(info);
 	}
 
 	@Override
 	public void slots() {
-		Set<RedisClusterNode> clusterNodes = redisTemplate.opsForCluster().getClusterNodes();
+		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetClusterNodes();
 		logger.info(clusterNodes);
 		Set<Slot> slots = AppConverters.toSetOfSlot().convert(clusterNodes);
 		RuntimeContainer.setRetMessage(slots);
@@ -56,7 +56,7 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void nodes() {
-		Set<RedisClusterNode> clusterNodes = redisTemplate.opsForCluster().getClusterNodes();
+		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetClusterNodes();
 		logger.info(sortNodes(clusterNodes));
 		RuntimeContainer.setRetMessage(sortNodes(clusterNodes));
 	}
@@ -64,7 +64,7 @@ public class ClusterServiceImpl implements ClusterService {
 	@Override
 	public void nodesInfo() {
 		Map<String, Info> infos = new HashMap<String, Info>();
-		Properties prop = redisTemplate.opsForCluster().info();
+		Properties prop = clusterConnection.info();
 		logger.info(prop);
 		
 		Enumeration<Object> keys = prop.keys();
@@ -80,14 +80,14 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void nodeInfo(String node) {
-		Properties prop = redisTemplate.opsForCluster().info(create(node));
+		Properties prop = clusterConnection.info(create(node));
 		Info info = AppConverters.toInfo().convert(prop);
 		RuntimeContainer.setRetMessage(info);
 	}
 	
 	@Override
 	public void activeMasters() {
-		Set<RedisClusterNode> clusterNodes = redisTemplate.opsForCluster().getClusterNodes();
+		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetClusterNodes();
 		Set<Node> nodes = AppConverters.toSetOfNode().convert(getActiveMasterNodes(clusterNodes));
 		logger.info(nodes);
 		RuntimeContainer.setRetMessage(nodes);
