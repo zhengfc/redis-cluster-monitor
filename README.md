@@ -18,3 +18,8 @@
 
 ## chart | cmd will be coming...
 key expire keysinslot slotsinnode...
+
+## TODO
+* dockerfile
+* cmd
+  * set/get/keysinslot/slotsinnode/expire
