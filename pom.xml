@@ -16,14 +16,6 @@
     <commons-lang3.version>3.1</commons-lang3.version>
   </properties>
   
-  <repositories>  
-    <repository>  
-        <id>repository.springframework.maven.snapshot</id>  
-        <name>Spring Framework Maven Snapshot Repository</name>  
-        <url>http://repo.spring.io/snapshot/</url>  
-    </repository>  
-  </repositories>  
-  
   <dependencies>
     <dependency><!-- jedis -->
 	    <groupId>redis.clients</groupId>
