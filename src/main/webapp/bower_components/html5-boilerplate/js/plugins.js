@@ -100,7 +100,7 @@
 	$.fn.extend({
 		fillTable : function(data, options) {
 			var settings = {
-				findbyname : true,
+				findby : "id",
 				restrict : true
 			}, self = this;
 
@@ -111,11 +111,15 @@
 			return this.each(function() {
 				$.each(data, function(k, v) {
 					var selector, elt;
-					if (settings.findbyname) { // by name
+					if (settings.findby=='name') { // by name
 						selector = '[name="' + k + '"]';
-						elt = (settings.restrict) ? self.find(selector) : $(selector);
-						elt.text(v);
+					} else if(settings.findby=='class'){ // by class
+						selector = '.' + k;
+					} else { // by id
+						selector = '#' + k;
 					}
+					elt = (settings.restrict) ? self.find(selector) : $(selector);
+					elt.text(v);
 				});
 			});
 		}

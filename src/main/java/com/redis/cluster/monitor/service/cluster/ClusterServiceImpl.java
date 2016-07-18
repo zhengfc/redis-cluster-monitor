@@ -43,7 +43,7 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void slots() {
-		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetClusterNodes();
+		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetNodes();
 		logger.info(clusterNodes);
 		Set<Slot> slots = AppConverters.toSetOfSlot().convert(clusterNodes);
 		RuntimeContainer.setRetMessage(slots);
@@ -51,7 +51,7 @@ public class ClusterServiceImpl implements ClusterService {
 
 	@Override
 	public void nodes() {
-		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetClusterNodes();
+		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetNodes();
 		logger.info(sortNodes(clusterNodes));
 		RuntimeContainer.setRetMessage(sortNodes(clusterNodes));
 	}
@@ -82,7 +82,7 @@ public class ClusterServiceImpl implements ClusterService {
 	
 	@Override
 	public void activeMasters() {
-		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetClusterNodes();
+		Set<RedisClusterNode> clusterNodes = clusterConnection.clusterGetNodes();
 		Set<Node> nodes = AppConverters.toSetOfNode().convert(getActiveMasterNodes(clusterNodes));
 		logger.info(nodes);
 		RuntimeContainer.setRetMessage(nodes);

@@ -93,8 +93,12 @@
     	    		$node.appendTo($("#nodes"));
     	    	}
     	    	//2. fill td data
+    	    	var options = {
+					findby : "class",
+					restrict : true
+				}
     	    	$.each(data, function( index, value ) {
-    	    		$(".nodeData"+index).fillTable( value );
+    	    		$(".nodeData"+index).fillTable( value, options );
         		});
         	});
     	}
@@ -117,22 +121,17 @@
     	function fillNodeData(hostPort) {
     		var uri = "/monitor/" + hostPort + "/info";
     		$.getJSON( uri, function( data ) {
-    	    	var options = {
-    	   		    findbyname: true,
-    	   		    restrict: false
-    	   		}
+    	    	$("#memory").fillTable( data.memory);  //fill memory
+    	    	$("#cpu").fillTable( data.cpu);  //fill cpu
+    	    	$("#cpu").fillTable( data.cluster);  //fill cluster
+    	    	$("#cpu").fillTable( data.keyspace);  //fill keyspace
     	    	
-    	    	$("#memory").fillTable( data.memory, options );  //fill memory
-    	    	$("#cpu").fillTable( data.cpu, options );  //fill cpu
-    	    	$("#cpu").fillTable( data.cluster, options );  //fill cluster
-    	    	$("#cpu").fillTable( data.keyspace, options );  //fill keyspace
-    	    	
-    	    	$("#stats").fillTable( data.stats, options );  //fill stats
-    	    	$("#persistence").fillTable( data.persistence, options );  //fill persistence
+    	    	$("#stats").fillTable( data.stats);  //fill stats
+    	    	$("#persistence").fillTable( data.persistence);  //fill persistence
 
-    	    	$("#server").fillTable( data.server, options );  //fill server
-    	    	$("#clients-replication").fillTable( data.clients, options );  //fill clients
-    	    	$("#clients-replication").fillTable( data.replication, options );  //fill replication
+    	    	$("#server").fillTable( data.server);  //fill server
+    	    	$("#clients-replication").fillTable( data.clients);  //fill clients
+    	    	$("#clients-replication").fillTable( data.replication);  //fill replication
     	    	var slaveSize = data.replication.connected_slaves;  //slaves
     	    	for(var i=0; i<slaveSize; i++){
     	    		
