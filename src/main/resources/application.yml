@@ -1,0 +1,12 @@
+# redis cluster properties
+spring:
+  redis:
+    cluster:
+      nodes: 10.48.193.201:7379,10.48.193.202:7380,10.48.193.203:9381
+      timeout: 2000
+      max-redirects: 5
+
+server:
+  context-path: /monitor
+  port: 8080
+  name: redis-cluster-monitor

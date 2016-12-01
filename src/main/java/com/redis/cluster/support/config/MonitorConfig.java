@@ -23,7 +23,7 @@ public class MonitorConfig {
 	private Long timeout;
 	@Value("${spring.redis.cluster.max-redirects}")
 	private int redirects;
-	@Value("${app-code:}")
+	@Value("${server.name:}")
 	private String appCode;
 	@Value("${expiration:0}")
 	private long expiration;
