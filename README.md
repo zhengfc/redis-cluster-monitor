@@ -3,7 +3,7 @@
   1. git clone https://github.com/zhengfc/redis-cluster-monitor.git 
   2. change redis.properties for yourself
   3. make package
-  4. run war on server(tomcat/jetty)
+  4. java -jar target/monitor.jar &
 
 ## cluster
   * cluster info, cluster slots, cluster nodes  
