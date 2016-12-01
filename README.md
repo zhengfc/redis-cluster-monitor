@@ -20,7 +20,7 @@
 key expire keysinslot slotsinnode...
 
 ## TODO
-* convert to spring boot app
+* convert to spring boot app √
 * dockerfile
 * cmd
   * set/get/keysinslot/slotsinnode/expire
