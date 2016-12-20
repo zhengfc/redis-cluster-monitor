@@ -2,15 +2,13 @@
 FROM openjdk:8-jdk-alpine
 MAINTAINER zhengfc zhengfc323@gmail.com
 
-ENV WORKDIR=/app
-RUN mkdir -p $WORKDIR
+# 添加/bin/bash
+# RUN apk add --no-cache \
+#    bash \
+#    su-exec
 
-# 将打包好的spring程序拷贝到容器中的指定位置
-ADD target/monitor-0.1.RELEASE.jar $WORKDIR/monitor-0.1.RELEASE.jar
-
-# 容器对外暴露7777端口
-EXPOSE 7777
-
-# 容器启动后需要执行的命令
-WORKDIR $WORKDIR
-CMD java -jar monitor-0.1.RELEASE.jar
+VOLUME /tmp
+ADD target/monitor-0.1.RELEASE.jar app.jar
+RUN sh -c 'touch /app.jar'
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
