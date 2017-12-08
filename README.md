@@ -1,3 +1,5 @@
+![](https://travis-ci.org/zhengfc/redis-cluster-monitor?branch=spring-boot)
+
 # redis-cluster-monitor
 
   1. git clone https://github.com/zhengfc/redis-cluster-monitor.git 
