@@ -1,4 +1,4 @@
-![](https://travis-ci.org/zhengfc/redis-cluster-monitor?branch=spring-boot)
+![](https://travis-ci.org/zhengfc/redis-cluster-monitor)
 
 # redis-cluster-monitor
 
