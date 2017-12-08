@@ -1,5 +1,5 @@
 # redis-cluster-monitor
-![](https://travis-ci.org/zhengfc/redis-cluster-monitor)
+![monitor-0.1.RELEASE](https://travis-ci.org/zhengfc/redis-cluster-monitor?branch=spring-boot)
 
   1. git clone https://github.com/zhengfc/redis-cluster-monitor.git 
   2. change application.yml for yourself
