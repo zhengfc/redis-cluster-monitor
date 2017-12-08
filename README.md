@@ -1,6 +1,5 @@
-![](https://travis-ci.org/zhengfc/redis-cluster-monitor)
-
 # redis-cluster-monitor
+![](https://travis-ci.org/zhengfc/redis-cluster-monitor)
 
   1. git clone https://github.com/zhengfc/redis-cluster-monitor.git 
   2. change application.yml for yourself
